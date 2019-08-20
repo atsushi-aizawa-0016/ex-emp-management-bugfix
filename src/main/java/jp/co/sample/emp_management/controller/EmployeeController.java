@@ -1,6 +1,5 @@
 package jp.co.sample.emp_management.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +47,10 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model) {
+	public String showList(Model model,String administratorName) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
+		model.addAttribute("administratorName", administratorName);
 		return "employee/list";
 	}
 
