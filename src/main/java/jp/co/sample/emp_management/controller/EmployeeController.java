@@ -47,10 +47,9 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model,String administratorName) {
+	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
-		model.addAttribute("administratorName", administratorName);
 		return "employee/list";
 	}
 
