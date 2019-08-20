@@ -58,7 +58,8 @@
 		<form th:action="@{/employee/findByLikeName}" method="post">
 			<span class="navbar-text navbar-right">
 				<input type="text" name="name">
-				<button>検索</button>
+				<button>検索</button><br>
+				<span th:text="${error}">error</span>
 			</span>	
 		</form>
 		

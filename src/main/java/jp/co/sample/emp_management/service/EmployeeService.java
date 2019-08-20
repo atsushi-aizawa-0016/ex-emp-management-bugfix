@@ -32,6 +32,12 @@ public class EmployeeService {
 		return employeeList;
 	}
 	
+	/**
+	 * 従業員情報を曖昧検索します.
+	 * 
+	 * @param name 名前
+	 * @return 従業員情報一覧
+	 */
 	public List<Employee> findByLikeName(String name){
 		List<Employee> employeeList = employeeRepository.findByLikeName(name);
 		return employeeList;

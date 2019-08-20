@@ -87,12 +87,12 @@ public class EmployeeRepository {
 	/**
 	 * 名前からメンバーを曖昧検索する.
 	 * 
-	 * @param name
-	 *            名前
+	 * @param name 名前
 	 * @return 検索されたメンバー一覧 
 	 */
 	public List<Employee> findByLikeName(String name) {
 		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name like :name";
+
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
 		
 		return template.query(sql, param, EMPLOYEE_ROW_MAPPER);

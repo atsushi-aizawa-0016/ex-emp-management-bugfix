@@ -64,6 +64,12 @@ public class EmployeeController {
 	@RequestMapping("/findByLikeName")
 	public String findByLikeName(String name,Model model) {
 		List<Employee> employeeList = employeeService.findByLikeName(name);
+		if (employeeList.size() == 0) {
+			employeeList = employeeService.showList();
+			model.addAttribute("employeeList", employeeList);
+			model.addAttribute("error", "一件もありませんでした");
+			return "employee/list";
+		}
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
