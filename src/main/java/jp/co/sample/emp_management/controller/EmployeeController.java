@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
 import jp.co.sample.emp_management.service.EmployeeService;
@@ -49,6 +50,20 @@ public class EmployeeController {
 	@RequestMapping("/showList")
 	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
+		model.addAttribute("employeeList", employeeList);
+		return "employee/list";
+	}
+	
+	/**
+	 * 曖昧検索後の従業員一覧画面を出力します.
+	 * 
+	 * @param name 名前
+	 * @param model モデル
+	 * @return 従業員一覧画面
+	 */
+	@RequestMapping("/findByLikeName")
+	public String findByLikeName(String name,Model model) {
+		List<Employee> employeeList = employeeService.findByLikeName(name);
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}

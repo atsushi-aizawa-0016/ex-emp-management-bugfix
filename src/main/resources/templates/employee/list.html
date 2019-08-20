@@ -53,7 +53,15 @@
 		<!-- パンくずリスト -->
 		<ol class="breadcrumb">
 			<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員リスト</a></li>
-		</ol>
+		</ol><br>
+		
+		<form th:action="@{/employee/findByLikeName}" method="post">
+			<span class="navbar-text navbar-right">
+				<input type="text" name="name">
+				<button>検索</button>
+			</span>	
+		</form>
+		
 
 		<!-- table -->
 		<div class="row">
