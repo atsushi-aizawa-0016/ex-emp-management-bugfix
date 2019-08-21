@@ -79,32 +79,22 @@ public class AdministratorController {
 						 ,BindingResult result
 						 ) {
 		
-		if (result.hasErrors()) {
-			return toInsert();
+		if (!(administratorService.findByMailAddress(form.getMailAddress()) == null)) {
+			FieldError fieldError2 = new FieldError(result.getObjectName(), "mailAddress", "登録済みのメールアドレスです");
+			result.addError(fieldError2);
 		}
-//		if (!(administratorService.findByMailAddress(form.getMailAddress()).equals(null))){
-//			FieldError fieldError2 = new FieldError(result.getObjectName(), "mailAddress", "登録済みのパスワードです");
-//			result.addError(fieldError2);
-//		}
-//		administratorService.findByMailAddress(form.getMailAddress());
-		
-		Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		if (form.getPassword().equals(form.getPassword2())) {
-			if (administratorService.findByMailAddress(form.getMailAddress()).equals(null)){
-				administratorService.insert(administrator);
-				return "redirect:/";
-			}else {
-				FieldError fieldError2 = new FieldError(result.getObjectName(), "mailAddress", "登録済みのパスワードです");
-				result.addError(fieldError2);
-				return "administrator/insert";			
-			}
-		}else {
+		if (!(form.getPassword().equals(form.getPassword2()))) {
 			FieldError fieldError = new FieldError(result.getObjectName(), "password2", "同じパスワードを入力してください");
 			result.addError(fieldError);
 		}
-		return "administrator/insert";
+		if (result.hasErrors()) {
+			return toInsert();
+		}
+		Administrator administrator = new Administrator();
+		// フォームからドメインにプロパティ値をコピー
+		BeanUtils.copyProperties(form, administrator);
+		administratorService.insert(administrator);
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
