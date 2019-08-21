@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
+import jp.co.sample.emp_management.form.Login2Form;
 import jp.co.sample.emp_management.form.LoginForm;
 import jp.co.sample.emp_management.service.AdministratorService;
 
@@ -48,6 +50,10 @@ public class AdministratorController {
 		return new LoginForm();
 	}
 
+	@ModelAttribute
+	public Login2Form setUpLogin2Form() {
+		return new Login2Form();
+	}
 	/////////////////////////////////////////////////////
 	// ユースケース：管理者を登録する
 	/////////////////////////////////////////////////////
@@ -64,14 +70,15 @@ public class AdministratorController {
 	/**
 	 * 管理者情報を登録します.
 	 * 
-	 * @param form
-	 *            管理者情報用フォーム
+	 * @param form　管理者情報用フォーム
+	 * 
 	 * @return ログイン画面へリダイレクト
 	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form
 						 ,BindingResult result
 						 ) {
+		
 		if (result.hasErrors()) {
 			return toInsert();
 		}
@@ -79,8 +86,14 @@ public class AdministratorController {
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
-		return "redirect:/";
+		if (form.getPassword().equals(form.getPassword2())) {
+			administratorService.insert(administrator);
+			return "redirect:/";			
+		}else {
+			FieldError fieldError = new FieldError(result.getObjectName(), "password2", "同じパスワードを入力してください");
+			result.addError(fieldError);
+		}
+		return "administrator/insert";
 	}
 
 	/////////////////////////////////////////////////////
