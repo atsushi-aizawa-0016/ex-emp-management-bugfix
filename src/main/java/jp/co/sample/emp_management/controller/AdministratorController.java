@@ -82,13 +82,24 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert();
 		}
+//		if (!(administratorService.findByMailAddress(form.getMailAddress()).equals(null))){
+//			FieldError fieldError2 = new FieldError(result.getObjectName(), "mailAddress", "登録済みのパスワードです");
+//			result.addError(fieldError2);
+//		}
+//		administratorService.findByMailAddress(form.getMailAddress());
 		
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		if (form.getPassword().equals(form.getPassword2())) {
-			administratorService.insert(administrator);
-			return "redirect:/";			
+			if (administratorService.findByMailAddress(form.getMailAddress()).equals(null)){
+				administratorService.insert(administrator);
+				return "redirect:/";
+			}else {
+				FieldError fieldError2 = new FieldError(result.getObjectName(), "mailAddress", "登録済みのパスワードです");
+				result.addError(fieldError2);
+				return "administrator/insert";			
+			}
 		}else {
 			FieldError fieldError = new FieldError(result.getObjectName(), "password2", "同じパスワードを入力してください");
 			result.addError(fieldError);
